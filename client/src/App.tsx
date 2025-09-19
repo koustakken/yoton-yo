@@ -1,6 +1,7 @@
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
+
 import { useEffect, useRef, useState } from "react";
 
 interface Notification {
@@ -48,6 +49,7 @@ function App() {
     setNotifications([]);
   };
 
+function App() {
   return (
     <>
       <div>
@@ -80,6 +82,13 @@ function App() {
           </div>
         )}
       </div>
+
+        <button>Notifications {0}</button>
+        <p>
+          Send get request to <code>http://localhost:3001</code> to create random notification
+        </p>
+      </div>
+      <p className="read-the-docs">Notifications not found</p>
     </>
   );
 }
