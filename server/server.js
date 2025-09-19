@@ -1,9 +1,27 @@
 const express = require("express");
 const http = require("http");
 const path = require("path");
+const WebSocket = require("ws");
 
 const app = express();
 const server = http.createServer(app);
+const wss = new WebSocket.Server({ server });
+
+const clients = new Set();
+
+wss.on("connection", (ws) => {
+  console.log("Client connected");
+  clients.add(ws);
+
+  ws.on("close", () => {
+    console.log("Client disconnected");
+    clients.delete(ws);
+  });
+
+  ws.on("error", (error) => {
+    console.error("WebSocket error:", error);
+  });
+});
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "dist")));
@@ -20,12 +38,12 @@ app.post("/api/notifications", (req, res) => {
     type: ["info", "warning", "success", "error"][Math.floor(Math.random() * 4)],
   };
 
-  // Отправляем уведомление всем подключенным клиентам
-  //   clients.forEach((client) => {
-  //     if (client.readyState === WebSocket.OPEN) {
-  //       client.send(JSON.stringify(notification));
-  //     }
-  //   });
+  // Отправляем уведомление
+  clients.forEach((client) => {
+    if (client.readyState === WebSocket.OPEN) {
+      client.send(JSON.stringify(notification));
+    }
+  });
 
   res.json({ success: true, notification });
 });
