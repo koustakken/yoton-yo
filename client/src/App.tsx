@@ -43,10 +43,9 @@ function App() {
   }, []);
 
   const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [count, setCount] = useState<number>(notifications.length || 0);
 
   const handleClearNotificationsCount = () => {
-    setCount(0);
+    setNotifications([]);
   };
 
   return (
@@ -61,7 +60,7 @@ function App() {
       </div>
       <h1>Vite + React</h1>
       <div className="card">
-        <button onClick={handleClearNotificationsCount}>Notifications {count}</button>
+        <button onClick={handleClearNotificationsCount}>Notifications {notifications.length}</button>
         <p>
           Send POST request to <code>http://localhost:3001</code> to create random notification
         </p>
